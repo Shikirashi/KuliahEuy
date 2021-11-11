@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutheader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/header_background"
+        android:padding="10dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/txt_hello"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text="Alarm"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/nextUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="12dp"
+        android:backgroundTint="@color/purple_700"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toBottomOf="@id/layoutheader">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Halo, Mahasiswa! Kuliah berikutnya:"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Analisa Desain Sistem"
+                android:textColor="@color/white"
+                android:textSize="28sp"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+    <ScrollView
+        android:id="@id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:overScrollMode="always"
+        android:scrollbars="none"
+        android:requiresFadingEdge="vertical"
+        android:fadingEdgeLength="20dp"
+        app:layout_constraintBottom_toTopOf="@id/botNav"
+        app:layout_constraintTop_toBottomOf="@+id/nextUp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/seninBorder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="Senin"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/seninAlarm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@id/seninBorder"
+                app:layout_constraintStart_toStartOf="@id/seninBorder"
+                app:layout_constraintTop_toBottomOf="@id/seninBorder"
+                android:overScrollMode="never"
+                android:scrollbars="none"/>
+
+            <TextView
+                android:id="@+id/selasaBorder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="Selasa"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/seninAlarm"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/selasaAlarm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@id/selasaBorder"
+                app:layout_constraintStart_toStartOf="@id/selasaBorder"
+                app:layout_constraintTop_toBottomOf="@id/selasaBorder"
+                android:overScrollMode="never"
+                android:scrollbars="none"/>
+
+            <TextView
+                android:id="@+id/rabuBorder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="Rabu"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/selasaAlarm"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rabuAlarm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@id/rabuBorder"
+                app:layout_constraintStart_toStartOf="@id/rabuBorder"
+                app:layout_constraintTop_toBottomOf="@id/rabuBorder"
+                android:overScrollMode="never"
+                android:scrollbars="none"/>
+
+            <TextView
+                android:id="@+id/kamisBorder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="Kamis"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/rabuAlarm"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/kamisAlarm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@id/kamisBorder"
+                app:layout_constraintStart_toStartOf="@id/kamisBorder"
+                app:layout_constraintTop_toBottomOf="@id/kamisBorder"
+                android:overScrollMode="never"
+                android:scrollbars="none"/>
+
+            <TextView
+                android:id="@+id/jumatBorder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="Jum'at"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/kamisAlarm"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/jumatAlarm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@id/jumatBorder"
+                app:layout_constraintStart_toStartOf="@id/jumatBorder"
+                app:layout_constraintTop_toBottomOf="@id/jumatBorder"
+                android:overScrollMode="never"
+                android:scrollbars="none"/>
+
+            <TextView
+                android:id="@+id/sabtuBorder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="Sabtu"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/jumatAlarm"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/sabtuAlarm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@id/sabtuBorder"
+                app:layout_constraintStart_toStartOf="@id/sabtuBorder"
+                app:layout_constraintTop_toBottomOf="@id/sabtuBorder"
+                android:overScrollMode="never"
+                android:scrollbars="none"/>
+
+            <TextView
+                android:id="@+id/mingguBorder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="Minggu"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/sabtuAlarm"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mingguAlarm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@id/mingguBorder"
+                app:layout_constraintStart_toStartOf="@id/mingguBorder"
+                app:layout_constraintTop_toBottomOf="@id/mingguBorder"
+                android:overScrollMode="never"
+                android:scrollbars="none"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <ImageButton
+    android:id="@+id/addnew"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:background="@null"
+    android:layout_margin="10dp"
+    android:src="@drawable/ic_baseline_add_circle_24"
+    app:layout_constraintBottom_toBottomOf="@id/scrollView"
+    app:layout_constraintEnd_toEndOf="@id/layoutheader"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/botNav"
+        android:layout_alignParentBottom="true"
+        app:itemBackground="@color/design_default_color_primary"
+        app:itemIconTint="@drawable/selector"
+        app:itemTextColor="@drawable/selector"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="?android:attr/windowBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/menu_nav" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
