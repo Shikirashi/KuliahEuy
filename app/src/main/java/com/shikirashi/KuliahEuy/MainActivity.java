@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.about:
-                        startActivity(new Intent(getApplicationContext(),About.class));
-                        finish();
+                        startActivity(new Intent(getApplicationContext(),FirebaseExample.class));
+                        //finish();
                         overridePendingTransition(0,0);
                         return true;
                 }
