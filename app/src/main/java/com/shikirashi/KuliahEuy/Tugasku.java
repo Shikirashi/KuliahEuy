@@ -28,43 +28,43 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class MainActivity extends AppCompatActivity {
+public class Tugasku extends AppCompatActivity {
 
-    private static final String TAG = "MainActivityLog";
-    private FirestoreRecyclerAdapter alarmAdapter;
-    RecyclerView seninList, selasaList;
+    private static final String TAG = "TugaskuActivity";
+    private FirestoreRecyclerAdapter tugasAdapter;
+    RecyclerView tugasList;
     ImageButton addnew;
 
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference ItemsRef = db.collection("Users").document(mUser.getUid()).collection("jadwal");
+    private CollectionReference ItemsRef = db.collection("Note").document("items").collection("tugas");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_tugasku);
+
+        tugasList = findViewById(R.id.tugasList);
+        addnew = findViewById(R.id.addnew);
 
         String userID = mUser.getUid();
 
-        addnew = findViewById(R.id.addnew);
-        seninList = findViewById(R.id.seninAlarm);
-        selasaList = findViewById(R.id.selasaAlarm);
+        Query query = db.collection("Users").document(userID).collection("tugas");
+        FirestoreRecyclerOptions<TugasModel> options = new FirestoreRecyclerOptions.Builder<TugasModel>().setQuery(query, TugasModel.class).build();
 
-        Query query = db.collection("Users").document(userID).collection("jadwal");
-        FirestoreRecyclerOptions<JadwalModel> options = new FirestoreRecyclerOptions.Builder<JadwalModel>().setQuery(query, JadwalModel.class).build();
-
-        alarmAdapter = new FirestoreRecyclerAdapter<JadwalModel, JadwalViewHolder>(options) {
+        tugasAdapter = new FirestoreRecyclerAdapter<TugasModel, TugasViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull JadwalViewHolder holder, int position, @NonNull JadwalModel model) {
+            protected void onBindViewHolder(@NonNull TugasViewHolder holder, int position, @NonNull TugasModel model) {
                 holder.judul.setText(model.getJudul());
-                holder.desc.setText(model.getDesc());
+                holder.deadline.setText(model.getDeadline());
             }
 
             @NonNull
             @Override
-            public JadwalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.alarm_rows, parent, false);
-                return new JadwalViewHolder(view);
+            public TugasViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tugas_rows, parent, false);
+                return new TugasViewHolder(view);
             }
         };
 
@@ -72,78 +72,68 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(!queryDocumentSnapshots.isEmpty()){
-                    //Toast.makeText(MainActivity.this, "Berhasil fetch data!", Toast.LENGTH_SHORT).show();
+
                 }else {
-                    Toast.makeText(MainActivity.this, "Data tidak tersedia!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Tugasku.this, "Data tugas tidak tersedia!", Toast.LENGTH_SHORT).show();
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(MainActivity.this, "Gagal retrieve data!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Tugasku.this, "Gagal retrieve tugas!", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, e.toString());
             }
         });
-        seninList.setAdapter(alarmAdapter);
-        seninList.setLayoutManager(new LinearLayoutManager(this));
-        selasaList.setAdapter(alarmAdapter);
-        selasaList.setLayoutManager(new LinearLayoutManager(this));
+
+        tugasList.setAdapter(tugasAdapter);
+        tugasList.setLayoutManager(new LinearLayoutManager(this));
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.botNav);
-        bottomNavigationView.setSelectedItemId(R.id.alarm);
+        bottomNavigationView.setSelectedItemId(R.id.tugasku);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.alarm:
-                        return true;
-
-                    case R.id.tugasku:
-                        startActivity(new Intent(getApplicationContext(), Tugasku.class));
+                        startActivity(new Intent(getApplicationContext(),MainActivity.class));
                         finish();
                         overridePendingTransition(0,0);
                         return true;
 
+                    case R.id.tugasku:
+                        return true;
+
                     case R.id.about:
                         startActivity(new Intent(getApplicationContext(), Profile.class));
-                        //finish();
+                        finish();
                         overridePendingTransition(0,0);
                         return true;
                 }
                 return false;
             }
         });
-
-        addnew.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("addnew", "Clicked on addnew button");
-                startActivity(new Intent(MainActivity.this, TempNew.class));
-                finish();
-            }
-        });
     }
 
-    private class JadwalViewHolder extends RecyclerView.ViewHolder {
+    private class TugasViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView judul, desc;
+        private TextView judul, deadline;
 
-        public JadwalViewHolder(@NonNull View itemView) {
+        public TugasViewHolder(@NonNull View itemView) {
             super(itemView);
-            judul = itemView.findViewById(R.id.alarmRecycleTitle);
-            desc = itemView.findViewById(R.id.alarmRecycleDesc);
+            judul = itemView.findViewById(R.id.tugasRecycleTitle);
+            deadline = itemView.findViewById(R.id.tugasRecycleDesc);
         }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        alarmAdapter.stopListening();
+        tugasAdapter.stopListening();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        alarmAdapter.startListening();
+        tugasAdapter.startListening();
     }
 }

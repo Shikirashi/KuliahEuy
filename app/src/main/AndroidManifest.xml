@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Uhaklwjd">
         <activity
+            android:name=".UploadJadwal"
+            android:exported="false" />
+        <activity
             android:name=".Register"
             android:exported="false" />
         <activity
@@ -22,16 +25,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".TempNew" />
-        <activity android:name=".About" />
-        <activity android:name=".Dashboard" />
+        <activity android:name=".Profile" />
+        <activity android:name=".Tugasku" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".FirebaseExample"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
     </application>
 
 </manifest>

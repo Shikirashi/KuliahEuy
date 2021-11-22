@@ -12,20 +12,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
-public class About extends AppCompatActivity {
+public class Profile extends AppCompatActivity {
 
     private static final String TAG = "About";
 
@@ -40,7 +35,7 @@ public class About extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
+        setContentView(R.layout.activity_profile);
 
 
         logout = findViewById(R.id.logoutButton);
@@ -89,7 +84,7 @@ public class About extends AppCompatActivity {
                 Log.d("cekLogout", "user ID 2: " + userID);
                 mAuth.signOut();
                 Log.d("cekLogout", "user ID 3: " + userID);
-                startActivity(new Intent(About.this, Login.class));
+                startActivity(new Intent(Profile.this, Login.class));
                 finish();
             }
         });
@@ -107,7 +102,7 @@ public class About extends AppCompatActivity {
                         return true;
 
                     case R.id.tugasku:
-                        startActivity(new Intent(getApplicationContext(),Dashboard.class));
+                        startActivity(new Intent(getApplicationContext(), Tugasku.class));
                         finish();
                         overridePendingTransition(0,0);
                         return true;

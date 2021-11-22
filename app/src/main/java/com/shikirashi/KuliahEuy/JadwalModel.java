@@ -2,28 +2,28 @@ package com.shikirashi.KuliahEuy;
 
 public class JadwalModel {
 
-    private String Title;
+    private String Judul;
     private String Desc;
 
     private JadwalModel(){
 
     }
 
-    private JadwalModel(String Title, String Desc){
-        this.Title = Title;
-        this.Desc = Desc;
+    private JadwalModel(String judul, String desc){
+        this.Judul = judul;
+        this.Desc = desc;
     }
 
-    public String getTitle() {
-        return Title;
+    public String getJudul() {
+        return Judul;
+    }
+
+    public void setJudul(String judul) {
+        Judul = judul;
     }
 
     public String getDesc() {
         return Desc;
-    }
-
-    public void setTitle(String title) {
-        Title = title;
     }
 
     public void setDesc(String desc) {
