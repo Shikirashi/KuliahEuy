@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Komp/Documents/github/KuliahEuy/app/src/main/res/layout/activity_about.xml" value="0.33061594202898553" />
+        <entry key="..\:/Users/Komp/Documents/github/KuliahEuy/app/src/main/res/layout/activity_login.xml" value="0.24379719525350593" />
+        <entry key="..\:/Users/Komp/Documents/github/KuliahEuy/app/src/main/res/layout/activity_register.xml" value="0.21302083333333333" />
         <entry key="..\:/Users/Komp/Documents/github/KuliahEuy/app/src/main/res/layout/alarm_rows.xml" value="0.31145833333333334" />
         <entry key="..\:/Users/Komp/Documents/github/KuliahEuy/app/src/main/res/layout/firebase_example.xml" value="0.20923913043478262" />
       </map>

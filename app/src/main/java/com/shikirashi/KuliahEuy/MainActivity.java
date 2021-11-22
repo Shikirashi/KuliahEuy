@@ -76,21 +76,21 @@ public class MainActivity extends AppCompatActivity {
                 if(!queryDocumentSnapshots.isEmpty()){
 
                 }else {
-                    Toast.makeText(MainActivity.this, "Collection does not exist!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Data tidak tersedia!", Toast.LENGTH_SHORT).show();
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(MainActivity.this, "Save failed!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Gagal retrieve data!", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, e.toString());
             }
         });
-        seninList.setHasFixedSize(true);
+        //seninList.setHasFixedSize(true);
         seninList.setAdapter(alarmAdapter);
         seninList.setLayoutManager(new LinearLayoutManager(this));
         //alarmAdapter = new AlarmAdapter(this, desc, items);
-        selasaList.setHasFixedSize(true);
+        //selasaList.setHasFixedSize(true);
         selasaList.setAdapter(alarmAdapter);
         selasaList.setLayoutManager(new LinearLayoutManager(this));
 
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.about:
-                        startActivity(new Intent(getApplicationContext(),FirebaseExample.class));
+                        startActivity(new Intent(getApplicationContext(),About.class));
                         //finish();
                         overridePendingTransition(0,0);
                         return true;
