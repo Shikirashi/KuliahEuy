@@ -31,8 +31,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivityLog";
-    private FirestoreRecyclerAdapter alarmAdapter;
-    RecyclerView seninList, selasaList;
+    //private FirestoreRecyclerAdapter alarmAdapter;
+    private FirestoreRecyclerAdapter seninAdapter, selasaAdapter, rabuAdapter, kamisAdapter, jumatAdapter, sabtuAdapter, mingguAdapter;
+    RecyclerView seninList, selasaList, rabuList, kamisList, jumatList, sabtuList, mingguList;
     ImageButton addnew;
 
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -49,11 +50,16 @@ public class MainActivity extends AppCompatActivity {
         addnew = findViewById(R.id.addnew);
         seninList = findViewById(R.id.seninAlarm);
         selasaList = findViewById(R.id.selasaAlarm);
+        rabuList = findViewById(R.id.rabuAlarm);
+        kamisList = findViewById(R.id.kamisAlarm);
+        jumatList = findViewById(R.id.jumatAlarm);
+        sabtuList = findViewById(R.id.sabtuAlarm);
+        mingguList = findViewById(R.id.mingguAlarm);
 
-        Query query = db.collection("Users").document(userID).collection("jadwal");
-        FirestoreRecyclerOptions<JadwalModel> options = new FirestoreRecyclerOptions.Builder<JadwalModel>().setQuery(query, JadwalModel.class).build();
+        Query senin = db.collection("Users").document(userID).collection("Senin");
+        FirestoreRecyclerOptions<JadwalModel> seninOptions = new FirestoreRecyclerOptions.Builder<JadwalModel>().setQuery(senin, JadwalModel.class).build();
 
-        alarmAdapter = new FirestoreRecyclerAdapter<JadwalModel, JadwalViewHolder>(options) {
+        seninAdapter = new FirestoreRecyclerAdapter<JadwalModel, JadwalViewHolder>(seninOptions) {
             @Override
             protected void onBindViewHolder(@NonNull JadwalViewHolder holder, int position, @NonNull JadwalModel model) {
                 holder.judul.setText(model.getJudul());
@@ -67,6 +73,135 @@ public class MainActivity extends AppCompatActivity {
                 return new JadwalViewHolder(view);
             }
         };
+
+        seninList.setAdapter(seninAdapter);
+        seninList.setLayoutManager(new LinearLayoutManager(this));
+
+        Query selasa = db.collection("Users").document(userID).collection("Selasa");
+        FirestoreRecyclerOptions<JadwalModel> selasaOptions = new FirestoreRecyclerOptions.Builder<JadwalModel>().setQuery(selasa, JadwalModel.class).build();
+
+        selasaAdapter = new FirestoreRecyclerAdapter<JadwalModel, JadwalViewHolder>(selasaOptions) {
+            @Override
+            protected void onBindViewHolder(@NonNull JadwalViewHolder holder, int position, @NonNull JadwalModel model) {
+                holder.judul.setText(model.getJudul());
+                holder.desc.setText(model.getDesc());
+            }
+
+            @NonNull
+            @Override
+            public JadwalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.alarm_rows, parent, false);
+                return new JadwalViewHolder(view);
+            }
+        };
+
+        selasaList.setAdapter(selasaAdapter);
+        selasaList.setLayoutManager(new LinearLayoutManager(this));
+
+        Query rabu = db.collection("Users").document(userID).collection("Rabu");
+        FirestoreRecyclerOptions<JadwalModel> rabuOptions = new FirestoreRecyclerOptions.Builder<JadwalModel>().setQuery(rabu, JadwalModel.class).build();
+
+        rabuAdapter = new FirestoreRecyclerAdapter<JadwalModel, JadwalViewHolder>(rabuOptions) {
+            @Override
+            protected void onBindViewHolder(@NonNull JadwalViewHolder holder, int position, @NonNull JadwalModel model) {
+                holder.judul.setText(model.getJudul());
+                holder.desc.setText(model.getDesc());
+            }
+
+            @NonNull
+            @Override
+            public JadwalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.alarm_rows, parent, false);
+                return new JadwalViewHolder(view);
+            }
+        };
+
+        rabuList.setAdapter(rabuAdapter);
+        rabuList.setLayoutManager(new LinearLayoutManager(this));
+
+        Query kamis = db.collection("Users").document(userID).collection("Kamis");
+        FirestoreRecyclerOptions<JadwalModel> kamisOptions = new FirestoreRecyclerOptions.Builder<JadwalModel>().setQuery(kamis, JadwalModel.class).build();
+
+        kamisAdapter = new FirestoreRecyclerAdapter<JadwalModel, JadwalViewHolder>(kamisOptions) {
+            @Override
+            protected void onBindViewHolder(@NonNull JadwalViewHolder holder, int position, @NonNull JadwalModel model) {
+                holder.judul.setText(model.getJudul());
+                holder.desc.setText(model.getDesc());
+            }
+
+            @NonNull
+            @Override
+            public JadwalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.alarm_rows, parent, false);
+                return new JadwalViewHolder(view);
+            }
+        };
+
+        kamisList.setAdapter(kamisAdapter);
+        kamisList.setLayoutManager(new LinearLayoutManager(this));
+
+        Query jumat = db.collection("Users").document(userID).collection("Jumat");
+        FirestoreRecyclerOptions<JadwalModel> jumatOptions = new FirestoreRecyclerOptions.Builder<JadwalModel>().setQuery(jumat, JadwalModel.class).build();
+
+        jumatAdapter = new FirestoreRecyclerAdapter<JadwalModel, JadwalViewHolder>(jumatOptions) {
+            @Override
+            protected void onBindViewHolder(@NonNull JadwalViewHolder holder, int position, @NonNull JadwalModel model) {
+                holder.judul.setText(model.getJudul());
+                holder.desc.setText(model.getDesc());
+            }
+
+            @NonNull
+            @Override
+            public JadwalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.alarm_rows, parent, false);
+                return new JadwalViewHolder(view);
+            }
+        };
+
+        jumatList.setAdapter(jumatAdapter);
+        jumatList.setLayoutManager(new LinearLayoutManager(this));
+
+        Query sabtu = db.collection("Users").document(userID).collection("Sabtu");
+        FirestoreRecyclerOptions<JadwalModel> sabtuOptions = new FirestoreRecyclerOptions.Builder<JadwalModel>().setQuery(sabtu, JadwalModel.class).build();
+
+        sabtuAdapter = new FirestoreRecyclerAdapter<JadwalModel, JadwalViewHolder>(sabtuOptions) {
+            @Override
+            protected void onBindViewHolder(@NonNull JadwalViewHolder holder, int position, @NonNull JadwalModel model) {
+                holder.judul.setText(model.getJudul());
+                holder.desc.setText(model.getDesc());
+            }
+
+            @NonNull
+            @Override
+            public JadwalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.alarm_rows, parent, false);
+                return new JadwalViewHolder(view);
+            }
+        };
+
+        sabtuList.setAdapter(sabtuAdapter);
+        sabtuList.setLayoutManager(new LinearLayoutManager(this));
+
+        Query minggu = db.collection("Users").document(userID).collection("Minggu");
+        FirestoreRecyclerOptions<JadwalModel> mingguOptions = new FirestoreRecyclerOptions.Builder<JadwalModel>().setQuery(minggu, JadwalModel.class).build();
+
+        mingguAdapter = new FirestoreRecyclerAdapter<JadwalModel, JadwalViewHolder>(mingguOptions) {
+            @Override
+            protected void onBindViewHolder(@NonNull JadwalViewHolder holder, int position, @NonNull JadwalModel model) {
+                holder.judul.setText(model.getJudul());
+                holder.desc.setText(model.getDesc());
+            }
+
+            @NonNull
+            @Override
+            public JadwalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.alarm_rows, parent, false);
+                return new JadwalViewHolder(view);
+            }
+        };
+
+        mingguList.setAdapter(mingguAdapter);
+        mingguList.setLayoutManager(new LinearLayoutManager(this));
 
         ItemsRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -84,10 +219,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, e.toString());
             }
         });
-        seninList.setAdapter(alarmAdapter);
-        seninList.setLayoutManager(new LinearLayoutManager(this));
-        selasaList.setAdapter(alarmAdapter);
-        selasaList.setLayoutManager(new LinearLayoutManager(this));
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.botNav);
         bottomNavigationView.setSelectedItemId(R.id.alarm);
@@ -118,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d("addnew", "Clicked on addnew button");
-                startActivity(new Intent(MainActivity.this, TempNew.class));
+                startActivity(new Intent(MainActivity.this, UploadJadwal.class));
                 finish();
             }
         });
@@ -138,12 +269,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        alarmAdapter.stopListening();
+        seninAdapter.stopListening();
+        selasaAdapter.stopListening();
+        rabuAdapter.stopListening();
+        kamisAdapter.stopListening();
+        jumatAdapter.stopListening();
+        sabtuAdapter.stopListening();
+        mingguAdapter.stopListening();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        alarmAdapter.startListening();
+        seninAdapter.startListening();
+        selasaAdapter.startListening();
+        rabuAdapter.startListening();
+        kamisAdapter.startListening();
+        jumatAdapter.startListening();
+        sabtuAdapter.startListening();
+        mingguAdapter.startListening();
     }
 }

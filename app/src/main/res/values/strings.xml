@@ -26,4 +26,14 @@
         <item>Idesc</item>
         <item>Jdesc</item>
     </string-array>
+
+    <string-array name="hari">
+        <item>Senin</item>
+        <item>Selasa</item>
+        <item>Rabu</item>
+        <item>Kamis</item>
+        <item>Jumat</item>
+        <item>Sabtu</item>
+        <item>Minggu</item>
+    </string-array>
 </resources>
