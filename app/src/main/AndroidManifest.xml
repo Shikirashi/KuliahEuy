@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Uhaklwjd">
         <activity
+            android:name=".UploadTugas"
+            android:exported="false" />
+        <activity
             android:name=".UploadJadwal"
             android:exported="false" />
         <activity
@@ -29,10 +32,12 @@
         <activity android:name=".Tugasku" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".FirebaseExample"
-            android:exported="true"></activity>
+            android:exported="true" />
+
+        <receiver android:name=".AlertReceiver"/>
     </application>
 
 </manifest>

@@ -5,13 +5,20 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -19,18 +26,29 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Profile extends AppCompatActivity {
 
     private static final String TAG = "About";
 
     private Button logout;
-    private TextView displayUsername, displayEmail;
+    private ImageView userIcon;
+    private TextView displayUsername, displayEmail, displayLevel, displayExp;
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String userID;
     private boolean isLoggedIn = false;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageReference = storage.getReference();
+    StorageReference userIconRef = storageReference.child("usersIcons/" + mAuth.getCurrentUser().getUid() + "/profileImage");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,31 +57,15 @@ public class Profile extends AppCompatActivity {
 
 
         logout = findViewById(R.id.logoutButton);
+        userIcon = findViewById(R.id.userIcon);
         displayUsername = findViewById(R.id.displayUsername);
         displayEmail = findViewById(R.id.displayUserEmail);
+        displayLevel = findViewById(R.id.userLevel);
+        displayExp = findViewById(R.id.userExp);
 
         if (mAuth.getCurrentUser() != null){
             userID = mAuth.getCurrentUser().getUid();
             DocumentReference reference = db.collection("Users").document(userID);
-//            reference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                    if (task.isSuccessful()) {
-//                        DocumentSnapshot document = task.getResult();
-//                        if (document.exists()) {
-//                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-//                            isLoggedIn = true;
-//                        } else {
-//                            Log.d(TAG, "No such document");
-//                            isLoggedIn = false;
-//                        }
-//                    } else {
-//                        Log.d(TAG, "get failed with ", task.getException());
-//                        isLoggedIn = false;
-//                    }
-//                    Log.d(TAG, "isLoggedIn: " + isLoggedIn);
-//                }
-//            });
             reference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -73,6 +75,25 @@ public class Profile extends AppCompatActivity {
                         Log.d("cekLogout", "document exists");
                         displayUsername.setText(value.getString("username"));
                         displayEmail.setText(value.getString("email"));
+                        displayLevel.setText("AR " + value.getLong("userLevel").toString());
+                        displayExp.setText("EXP " + value.getLong("currExp").toString() + "/" + value.getLong("nextExp").toString());
+
+                        final long ONE_MEGABYTE = 1024 * 1024;
+                        userIconRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                            @Override
+                            public void onSuccess(byte[] bytes) {
+                                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                userIcon.setImageBitmap(bmp);
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                Toast.makeText(getApplicationContext(), "Foto profil tidak ditemukan", Toast.LENGTH_LONG).show();
+                                userIcon.setImageResource(R.drawable.ic_baseline_person_32);
+                            }
+                        });
+
                     }
                 }
             });

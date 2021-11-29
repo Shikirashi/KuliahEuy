@@ -1,6 +1,7 @@
 package com.shikirashi.KuliahEuy;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -101,7 +102,13 @@ public class Login extends AppCompatActivity {
                             }
                             else {
                                 user.sendEmailVerification();
-                                Toast.makeText(Login.this, "Silakan cek email Anda untuk verifikasi", Toast.LENGTH_SHORT).show();
+
+                                new AlertDialog.Builder(Login.this)
+                                        .setTitle("Verifikasi email")
+                                        .setMessage("Silakan cek email Anda untuk verifikasi akun")
+                                        .setPositiveButton(android.R.string.ok, null)
+                                        .setIcon(R.drawable.ic_baseline_email_24)
+                                        .show();
                             }
                         }
                         else {
