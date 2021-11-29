@@ -52,14 +52,14 @@ public class UploadTugas extends AppCompatActivity {
     private List<String> titles;
     private List<Date> dates;
     private List<Long> ids;
-    private Integer delay;
+    private Long delay;
 
     private static final String TAG = "UploadTugasLog";
     private static final String KEY_TITLE = "Judul";
     private static final String KEY_DESC = "Deskripsi";
     private static final String KEY_DONE = "ifDone";
     private static final String KEY_DEAD = "Deadline";
-    private static final String KEY_ID = "NotifID";
+    private static final String KEY_ID = "notifID";
 
     private final FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -179,65 +179,65 @@ public class UploadTugas extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 titles.add(document.getString("Judul"));
                                 dates.add(document.getDate("Deadline"));
-                                ids.add(document.getLong("NotifID"));
+                                ids.add(document.getLong("notifID"));
 
                                 db.collection("Users").document(mUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if (task.isSuccessful()){
-                                            delay = document.getLong("delayTugas").intValue();
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot docu = task.getResult();
+                                            delay = docu.getLong("delayTugas");
+                                            Log.d(TAG, "Retrieved: " + titles.toString());
+                                            Log.d(TAG, "Retrieved: " + dates.toString());
+                                            Log.d(TAG, "Scheduling notifications...");
+                                            Log.d(TAG, "titles size is: " + titles.size());
+
+                                            for (int i = 0; i < titles.size(); i++) {
+                                                Log.d(TAG, "Canceling previous notifications...");
+
+                                                Intent notificationIntent = new Intent(UploadTugas.this, AlertReceiver.class);
+                                                notificationIntent.putExtra("notifID", ids.get(i).intValue());
+                                                notificationIntent.putExtra("title", "KuliahEuy");
+                                                notificationIntent.putExtra("message", titles.get(i));
+                                                PendingIntent pendingIntent = PendingIntent.getBroadcast(UploadTugas.this, ids.get(i).intValue(), notificationIntent, 0);
+                                                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+                                                alarmManager.cancel(pendingIntent);
+                                                Log.d("UploadTugasLog", "Alarm " + titles.get(i) + " canceled");
+                                            }
+
+                                            for (int i = 0; i < titles.size(); i++) {
+                                                Log.d(TAG, "Starting...");
+                                                Date dated = dates.get(i);
+                                                Log.d(TAG, "dated is: " +  dated);
+
+
+                                                Intent notificationIntent = new Intent(UploadTugas.this, AlertReceiver.class);
+                                                notificationIntent.putExtra("notifID", ids.get(i).intValue());
+                                                notificationIntent.putExtra("title", "KuliahEuy");
+                                                notificationIntent.putExtra("message", titles.get(i));
+                                                PendingIntent pendingIntent = PendingIntent.getBroadcast(UploadTugas.this, ids.get(i).intValue(), notificationIntent, 0);
+                                                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                                                //Debug. Schedule at 2, 4, 6 minutes.
+
+                                                if(delay != null){
+                                                    if(dated.before(cal.getTime())){
+                                                        dated = new Date(dated.getTime() + (1000 * 3600 * 24));
+                                                    }
+                                                    Log.d(TAG, "Delay is " + delay);
+                                                    dated = new Date(dated.getTime() - delay);
+                                                }
+                                                else {
+                                                    Log.d(TAG, "Delay is null!");
+                                                }
+                                                alarmManager.setExact(AlarmManager.RTC_WAKEUP, dated.getTime(), pendingIntent);
+                                                Log.d("UploadTugasLog", "Date set is: " + dated);
+                                                startActivity(new Intent(UploadTugas.this, Tugasku.class));
+                                                finish();
+                                            }
                                         }
-                                        DocumentReference users = db.collection("Users").document(mUser.getUid());
-                                        Map<String, Object> userData = new HashMap<>();
-                                        delay = 1200000;
-                                        userData.put("delayTugas", delay);
-                                        users.set(userData);
                                     }
                                 });
-
-                            }
-                            Log.d(TAG, "Retrieved: " + titles.toString());
-                            Log.d(TAG, "Retrieved: " + dates.toString());
-                            Log.d(TAG, "Scheduling notifications...");
-                            Log.d(TAG, "titles size is: " + titles.size());
-
-                            for (int i = 0; i < titles.size(); i++) {
-                                Log.d(TAG, "Canceling previous notifications...");
-
-                                Intent notificationIntent = new Intent(UploadTugas.this, AlertReceiver.class);
-                                notificationIntent.putExtra("ID", ids.get(i).intValue());
-                                notificationIntent.putExtra("title", "KuliahEuy");
-                                notificationIntent.putExtra("message", titles.get(i));
-                                PendingIntent pendingIntent = PendingIntent.getBroadcast(UploadTugas.this, ids.get(i).intValue(), notificationIntent, 0);
-                                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-                                alarmManager.cancel(pendingIntent);
-                                Log.d("UploadTugasLog", "Alarm " + titles.get(i) + " canceled");
-                            }
-
-                            for (int i = 0; i < titles.size(); i++) {
-                                Log.d(TAG, "Starting...");
-                                SimpleDateFormat format = new SimpleDateFormat("MMMM dd, yyyy HH:mm:ss z");
-                                Date dated = dates.get(i);
-
-
-                                Intent notificationIntent = new Intent(UploadTugas.this, AlertReceiver.class);
-                                notificationIntent.putExtra("ID", ids.get(i).intValue());
-                                notificationIntent.putExtra("title", "KuliahEuy");
-                                notificationIntent.putExtra("message", titles.get(i));
-                                PendingIntent pendingIntent = PendingIntent.getBroadcast(UploadTugas.this, ids.get(i).intValue(), notificationIntent, 0);
-                                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                                //Debug. Schedule at 2, 4, 6 minutes.
-
-                                if(dated.before(cal.getTime())){
-                                    dated = new Date(dated.getTime() + (1000 * 3600 * 24));
-                                }
-
-                                dated = new Date(dated.getTime() - delay);
-                                alarmManager.setExact(AlarmManager.RTC_WAKEUP, dated.getTime(), pendingIntent);
-                                Log.d("UploadTugasLog", "Date set is: " + dated);
-                                startActivity(new Intent(UploadTugas.this, Tugasku.class));
-                                finish();
                             }
                         }
                         else {

@@ -13,8 +13,10 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -49,6 +51,27 @@ public class MainActivity extends AppCompatActivity  {
         jumatList = findViewById(R.id.jumatAlarm);
         sabtuList = findViewById(R.id.sabtuAlarm);
         mingguList = findViewById(R.id.mingguAlarm);
+
+        db.collection("Users").document(userID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot snap = task.getResult();
+                    int currExp = snap.getLong("currExp").intValue();
+                    int nextExp = snap.getLong("nextExp").intValue();
+                    if(getIntent().hasExtra("EXP")){
+                        Log.d(TAG, "Current EXP is: " + currExp);
+                        int exp = getIntent().getIntExtra("EXP", 1);
+                        db.collection("Users").document(userID).update("currExp", currExp + exp);
+                        Log.d(TAG, "EXP is now: " + snap.getLong("currExp").intValue());
+                    }
+
+                    if(currExp >= nextExp){
+                        db.collection("Users").document(userID).update("nextExp", nextExp + 10);
+                    }
+                }
+            }
+        });
 
         Query query = db.collection("Users").document(userID).collection("Senin").orderBy("waktu");
         FirestoreRecyclerOptions<Jadwal> options = new FirestoreRecyclerOptions.Builder<Jadwal>().setQuery(query, Jadwal.class).build();

@@ -32,6 +32,7 @@ public class TugasBackAdapter extends FirestoreRecyclerAdapter<Tugas, TugasBackA
     @Override
     protected void onBindViewHolder(@NonNull TugasHolder holder, int position, @NonNull Tugas model) {
         holder.judul.setText(model.getJudul());
+        holder.desc.setText(model.getDeskripsi());
         SimpleDateFormat sfd = new SimpleDateFormat(" HH:mm dd-MM-yyyy");
         String strDate = sfd.format(model.getDeadline());
         holder.deadline.setText(strDate);
@@ -46,12 +47,13 @@ public class TugasBackAdapter extends FirestoreRecyclerAdapter<Tugas, TugasBackA
 
     class TugasHolder extends RecyclerView.ViewHolder {
 
-        private TextView judul, deadline;
+        private TextView judul, desc, deadline;
 
         public TugasHolder(@NonNull View itemView) {
             super(itemView);
             judul = itemView.findViewById(R.id.tugasRecycleTitle);
-            deadline = itemView.findViewById(R.id.tugasRecycleDesc);
+            desc = itemView.findViewById(R.id.tugasRecycleDesc);
+            deadline = itemView.findViewById(R.id.tugasRecycleTime);
         }
     }
 }

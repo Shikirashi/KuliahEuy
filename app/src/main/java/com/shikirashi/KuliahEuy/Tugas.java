@@ -1,21 +1,22 @@
 package com.shikirashi.KuliahEuy;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Tugas {
 
     private String Judul;
     private Date Deadline;
+    private String Deskripsi;
     private Boolean ifDone;
 
     private Tugas(){
 
     }
 
-    private Tugas(String judul, Date deadline, Boolean isDone){
+    private Tugas(String judul, Date deadline, String deskripsi, Boolean isDone){
         this.Judul = judul;
         this.Deadline = deadline;
+        Deskripsi = deskripsi;
         this.ifDone = isDone;
     }
 
@@ -41,5 +42,13 @@ public class Tugas {
 
     public void setIfDone(Boolean isdone) {
         this.ifDone = isdone;
+    }
+
+    public String getDeskripsi() {
+        return Deskripsi;
+    }
+
+    public void setDeskripsi(String deskripsi) {
+        Deskripsi = deskripsi;
     }
 }

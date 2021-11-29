@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Uhaklwjd">
         <activity
+            android:name=".Friendlist"
+            android:exported="false" />
+        <activity
             android:name=".UploadTugas"
             android:exported="false" />
         <activity
@@ -37,7 +40,7 @@
             android:name=".FirebaseExample"
             android:exported="true" />
 
-        <receiver android:name=".AlertReceiver"/>
+        <receiver android:name=".AlertReceiver" />
     </application>
 
 </manifest>

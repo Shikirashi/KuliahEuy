@@ -25,7 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Login extends AppCompatActivity {
-
+    private static final String TAG = "LoginLog";
     private TextView forgotPass, registerBtn;
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
     private EditText inputEmail, inputPassword;
@@ -49,8 +49,19 @@ public class Login extends AppCompatActivity {
         inputEmail = findViewById(R.id.inputEmail);
         inputPassword = findViewById(R.id.inputPassword);
 
+        Intent intent = new Intent(Login.this, MainActivity.class);
+
+
+
         if(mUser != null){
-            startActivity(new Intent(Login.this, MainActivity.class));
+            if(getIntent().hasExtra("notifID")){
+                Log.d(TAG, "dapat id " + getIntent().getIntExtra("notifID", 0));
+                intent.putExtra("EXP", 1);
+            }
+            else {
+                Log.d(TAG, "tidak dapat ID");
+            }
+            startActivity(intent);
             finish();
         }
 

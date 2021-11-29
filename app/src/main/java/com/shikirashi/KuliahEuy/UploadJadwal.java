@@ -61,7 +61,7 @@ public class UploadJadwal extends AppCompatActivity{
     private List<String> titles;
     private List<Date> dates;
     private List<Long> ids;
-    private Integer delay;
+    private Long delay;
 
     private EditText editTitle, editDesc;
     private Button saveBtn, pickTime, delBtn;
@@ -98,13 +98,14 @@ public class UploadJadwal extends AppCompatActivity{
             ID = getIntent().getStringExtra("ID");
             hari = getIntent().getStringExtra("hari");
             delBtn.setVisibility(View.VISIBLE);
-            delBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    deleteDocument();
-                }
-            });
         }
+
+        delBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteDocument();
+            }
+        });
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.hari, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -233,6 +234,8 @@ public class UploadJadwal extends AppCompatActivity{
                     DocumentSnapshot document = task.getResult();
                     if(document.exists()){
                         ref.delete();
+                        startActivity(new Intent(UploadJadwal.this, MainActivity.class));
+                        finish();
                     }
                 }
                 else {
@@ -262,52 +265,47 @@ public class UploadJadwal extends AppCompatActivity{
                                     @Override
                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                         if (task.isSuccessful()){
-                                            delay = document.getLong("delayJadwal").intValue();
+                                            DocumentSnapshot docu = task.getResult();
+                                            delay = docu.getLong("delayJadwal");
+                                            Log.d(TAG, "Retrieved: " + titles.toString());
+                                            Log.d(TAG, "Retrieved: " + dates.toString());
+                                            Log.d(TAG, "Scheduling notifications...");
+                                            Log.d(TAG, "titles size is: " + titles.size());
+
+                                            for (int i = 0; i < titles.size(); i++) {
+                                                Log.d(TAG, "Canceling previous notifications...");
+
+                                                Intent notificationIntent = new Intent(UploadJadwal.this, AlertReceiver.class);
+                                                notificationIntent.putExtra("notifID", ids.get(i).intValue());
+                                                notificationIntent.putExtra("title", "KuliahEuy");
+                                                notificationIntent.putExtra("message", titles.get(i) + " akan segera dimulai! Ketuk notifikasi ini untuk dapat EXP!");
+                                                PendingIntent pendingIntent = PendingIntent.getBroadcast(UploadJadwal.this, ids.get(i).intValue(), notificationIntent, 0);
+                                                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+                                                alarmManager.cancel(pendingIntent);
+                                                Log.d("UploadTugasLog", "Alarm " + titles.get(i) + " canceled");
+                                            }
+
+                                            for (int i = 0; i < titles.size(); i++) {
+                                                Log.d(TAG, "Starting...");
+                                                Date dated = dates.get(i);
+
+                                                Intent notificationIntent = new Intent(UploadJadwal.this, AlertReceiver.class);
+                                                notificationIntent.putExtra("notifID", ids.get(i).intValue());
+                                                notificationIntent.putExtra("title", "KuliahEuy");
+                                                notificationIntent.putExtra("message", titles.get(i) + " akan segera dimulai! Ketuk notifikasi ini untuk dapat EXP!");
+                                                PendingIntent pendingIntent = PendingIntent.getBroadcast(UploadJadwal.this, ids.get(i).intValue(), notificationIntent, 0);
+                                                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+                                                dated = new Date(dated.getTime() - delay);
+                                                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, dated.getTime(), 1000 * 3600 * 24 * 7 , pendingIntent);
+                                                Log.d("UploadTugasLog", "Date set is: " + dated);
+                                                startActivity(new Intent(UploadJadwal.this, Tugasku.class));
+                                                finish();
+                                            }
                                         }
-                                        DocumentReference users = db.collection("Users").document(mUser.getUid());
-                                        Map<String, Object> userData = new HashMap<>();
-                                        delay = 3600000;
-                                        userData.put("delayJadwal", delay);
-                                        users.set(userData);
                                     }
                                 });
-
-                            }
-                            Log.d(TAG, "Retrieved: " + titles.toString());
-                            Log.d(TAG, "Retrieved: " + dates.toString());
-                            Log.d(TAG, "Scheduling notifications...");
-                            Log.d(TAG, "titles size is: " + titles.size());
-
-                            for (int i = 0; i < titles.size(); i++) {
-                                Log.d(TAG, "Canceling previous notifications...");
-
-                                Intent notificationIntent = new Intent(UploadJadwal.this, AlertReceiver.class);
-                                notificationIntent.putExtra("ID", ids.get(i).intValue());
-                                notificationIntent.putExtra("title", "KuliahEuy");
-                                notificationIntent.putExtra("message", titles.get(i) + " akan segera dimulai! Ketuk notifikasi ini untuk dapat EXP!");
-                                PendingIntent pendingIntent = PendingIntent.getBroadcast(UploadJadwal.this, ids.get(i).intValue(), notificationIntent, 0);
-                                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-                                alarmManager.cancel(pendingIntent);
-                                Log.d("UploadTugasLog", "Alarm " + titles.get(i) + " canceled");
-                            }
-
-                            for (int i = 0; i < titles.size(); i++) {
-                                Log.d(TAG, "Starting...");
-                                Date dated = dates.get(i);
-
-                                Intent notificationIntent = new Intent(UploadJadwal.this, AlertReceiver.class);
-                                notificationIntent.putExtra("ID", ids.get(i).intValue());
-                                notificationIntent.putExtra("title", "KuliahEuy");
-                                notificationIntent.putExtra("message", titles.get(i) + " akan segera dimulai! Ketuk notifikasi ini untuk dapat EXP!");
-                                PendingIntent pendingIntent = PendingIntent.getBroadcast(UploadJadwal.this, ids.get(i).intValue(), notificationIntent, 0);
-                                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-                                dated = new Date(dated.getTime() - delay);
-                                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, dated.getTime(), 1000 * 3600 * 24 * 7 , pendingIntent);
-                                Log.d("UploadTugasLog", "Date set is: " + dated);
-                                startActivity(new Intent(UploadJadwal.this, Tugasku.class));
-                                finish();
                             }
                         }
                         else {
